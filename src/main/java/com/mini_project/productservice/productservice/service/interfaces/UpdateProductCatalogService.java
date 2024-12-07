@@ -1,6 +1,6 @@
 package com.mini_project.productservice.productservice.service.interfaces;
 
-import com.mini_project.productservice.productservice.dto.ProductCatalogChangeRequest;
+import com.mini_project.productservice.productservice.model.dto.ProductCatalogAddRequest;
 import com.mini_project.productservice.productservice.model.Product;
 import org.springframework.http.ResponseEntity;
 
@@ -14,7 +14,7 @@ public interface UpdateProductCatalogService {
      * @param requestList List of product catalog change requests.
      * @return ResponseEntity indicating the success or failure of the request.
      */
-    ResponseEntity<?> submitChangeRequest(List<ProductCatalogChangeRequest> requestList);
+    ResponseEntity<?> submitChangeRequest(List<ProductCatalogAddRequest> requestList);
 
     /**
      * Generates a CSV file containing pending product change requests.

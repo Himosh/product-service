@@ -1,7 +1,7 @@
 package com.mini_project.productservice.productservice.controller;
 
-import com.mini_project.productservice.productservice.dto.ProductCatalogChangeRequest;
-import com.mini_project.productservice.productservice.dto.ProductDTO;
+import com.mini_project.productservice.productservice.model.dto.ProductCatalogAddRequest;
+import com.mini_project.productservice.productservice.model.dto.ProductDTO;
 import com.mini_project.productservice.productservice.service.ProductServiceImpl;
 import com.mini_project.productservice.productservice.service.UpdateProductCatalogServiceImpl;
 import lombok.AllArgsConstructor;
@@ -82,7 +82,7 @@ public class ProductController {
     }
 
     @PatchMapping("/catalog")
-    public ResponseEntity<?> submitChangeRequests(@RequestBody List<ProductCatalogChangeRequest> requestList) {
+    public ResponseEntity<?> submitChangeRequests(@RequestBody List<ProductCatalogAddRequest> requestList) {
         return productUpdateService.submitChangeRequest(requestList);
     }
 }

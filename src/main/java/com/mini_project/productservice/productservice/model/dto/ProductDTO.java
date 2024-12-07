@@ -1,4 +1,4 @@
-package com.mini_project.productservice.productservice.dto;
+package com.mini_project.productservice.productservice.model.dto;
 
 import lombok.*;
 

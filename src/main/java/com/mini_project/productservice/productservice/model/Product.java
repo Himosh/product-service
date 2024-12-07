@@ -22,14 +22,11 @@ public class Product {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @Column(name = "product_description")
     private String productDescription;
 
     @ManyToOne
-    @JoinColumn(name = "category_name", referencedColumnName = "category_name", nullable = false)
+    @JoinColumn(name = "category_name", nullable = false)
     private ProductCategory category;
 
     @Column(name = "stock")

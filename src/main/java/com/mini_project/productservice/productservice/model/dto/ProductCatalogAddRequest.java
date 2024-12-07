@@ -1,6 +1,5 @@
-package com.mini_project.productservice.productservice.dto;
+package com.mini_project.productservice.productservice.model.dto;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ProductCatalogChangeRequest {
+public class ProductCatalogAddRequest {
     private String productId;
 
     private String supplierId;
@@ -21,6 +20,6 @@ public class ProductCatalogChangeRequest {
 
     private int stock;
 
-    private BigDecimal newPrice;
+    private Double newPrice;
 }
 
