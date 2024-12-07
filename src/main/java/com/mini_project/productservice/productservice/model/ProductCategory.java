@@ -1,10 +1,10 @@
 package com.mini_project.productservice.productservice.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "product_category")
@@ -15,13 +15,18 @@ public class ProductCategory {
 
     @Id
     @Column(name = "category_id", nullable = false)
-    private String categoryId;
+    private Long id;
 
-    @Column(name = "category_name", nullable = false)
+    @Column(nullable = false)
     private String categoryName;
 
-    @Column(name = "description")
     private String description;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdDateTime;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date updatedDateTime;
 }

@@ -1,25 +1,21 @@
 package com.mini_project.productservice.productservice.model.dto;
 
+import com.mini_project.productservice.productservice.model.enums.RequestType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class ProductCatalogChangeRequest {
-    private String productId;
-
+public class ProductCatalogRequestDTO {
+    private Long productId;
+    private Long categoryId;
     private String supplierId;
-
+    private String newProductName;
     private String newDescription;
-
-    private String newImageUrl;
-
     private int stock;
-
-    private BigDecimal newPrice;
+    private Double price;
+    private RequestType requestType;
 }
 

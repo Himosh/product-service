@@ -2,8 +2,10 @@ package com.mini_project.productservice.productservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "products")
@@ -13,26 +15,31 @@ import java.math.BigDecimal;
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id", nullable = false)
-    private String productId;
+    private Long id;
 
-    @Column(name = "supplier_id", nullable = false)
+    @Column(nullable = false)
     private String supplierId;
 
-    @Column(name = "name", nullable = false)
+    @Column(nullable = false)
     private String name;
 
-    @Column(name = "product_description")
     private String productDescription;
+    private int stock;
+
+    @Column(nullable = false)
+    private Double price;
 
     @ManyToOne
     @JoinColumn(name = "category_name", nullable = false)
     private ProductCategory category;
 
-    @Column(name = "stock")
-    private int stock;
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date createdDateTime;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
-
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    private Date updatedDateTime;
 }

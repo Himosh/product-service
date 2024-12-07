@@ -1,7 +1,6 @@
 package com.mini_project.productservice.productservice.config;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,10 +10,10 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-//        modelMapper.addMappings(new PropertyMap<TransactionCreateDTO, Transaction>() {
+//        modelMapper.addMappings(new PropertyMap<ProductCatalogAddRequest, ProductCatalogRequest>() {
 //            @Override
 //            protected void configure() {
-//                skip(destination.getId());
+//                skip(destination.getId(),destination.getSupplierId());
 //            }
 //        });
 //

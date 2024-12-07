@@ -47,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO getProductById(String productId) {
+    public ProductDTO getProductById(Long productId) {
         try {
             Optional<Product> productOptional = productRepository.findById(productId);
             if (productOptional.isPresent()) {
