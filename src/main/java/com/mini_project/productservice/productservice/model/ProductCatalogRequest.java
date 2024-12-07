@@ -1,5 +1,6 @@
 package com.mini_project.productservice.productservice.model;
 
+import com.mini_project.productservice.productservice.model.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductTemp {
+public class ProductCatalogRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long requestId;
@@ -26,15 +27,12 @@ public class ProductTemp {
     private String newImageUrl;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private ProductStatus status;
 
     private int stock;
 
-    private BigDecimal price;
+    private Double price;
 
     private LocalDateTime createdAt;
 
-    public enum Status {
-        PENDING, APPROVED, REJECTED
-    }
 }

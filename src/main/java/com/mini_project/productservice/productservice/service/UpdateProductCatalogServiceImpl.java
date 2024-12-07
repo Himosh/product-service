@@ -1,8 +1,9 @@
 package com.mini_project.productservice.productservice.service;
 
-import com.mini_project.productservice.productservice.dto.ProductCatalogChangeRequest;
+import com.mini_project.productservice.productservice.model.dto.ProductCatalogAddRequest;
 import com.mini_project.productservice.productservice.model.Product;
-import com.mini_project.productservice.productservice.model.ProductTemp;
+import com.mini_project.productservice.productservice.model.ProductCatalogRequest;
+import com.mini_project.productservice.productservice.model.enums.ProductStatus;
 import com.mini_project.productservice.productservice.repository.ProductRepository;
 import com.mini_project.productservice.productservice.repository.ProductTempRepository;
 import com.mini_project.productservice.productservice.service.interfaces.UpdateProductCatalogService;
@@ -19,7 +20,6 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -30,18 +30,18 @@ public class UpdateProductCatalogServiceImpl implements UpdateProductCatalogServ
 
     @Transactional
     @Override
-    public ResponseEntity<?> submitChangeRequest(List<ProductCatalogChangeRequest> requestList) {
+    public ResponseEntity<?> submitChangeRequest(List<ProductCatalogAddRequest> requestList) {
         if (requestList == null || requestList.isEmpty()) {
             return ResponseEntity.badRequest().body("Request list cannot be null or empty.");
         }
 
-        for (ProductCatalogChangeRequest request : requestList) {
+        for (ProductCatalogAddRequest request : requestList) {
             try {
-                ProductTemp productTemp = new ProductTemp();
+                ProductCatalogRequest productTemp = new ProductCatalogRequest();
 
                 productTemp.setProductId(request.getProductId());
                 productTemp.setSupplierId(request.getSupplierId());
-                productTemp.setStatus(ProductTemp.Status.PENDING);
+                productTemp.setStatus(ProductStatus.PENDING);
                 productTemp.setNewDescription(request.getNewDescription());
                 productTemp.setNewImageUrl(request.getNewImageUrl());
                 productTemp.setStock(request.getStock());
@@ -61,14 +61,14 @@ public class UpdateProductCatalogServiceImpl implements UpdateProductCatalogServ
     @Transactional
     @Override
     public String generatePendingProductsCsv(String supplierId) {
-        List<ProductTemp> pendingProducts = productTempRepository.findByStatusAndSupplierId(ProductTemp.Status.PENDING, supplierId);
+        List<ProductCatalogRequest> pendingProducts = productTempRepository.findByStatusAndSupplierId(ProductStatus.PENDING, supplierId);
         String csvFilePath = "pending_products.csv";
 
         List<String[]> csvData = new ArrayList<>();
         String[] header = { "Request ID", "Product ID", "Supplier ID", "New Description", "New Image URL","New Stock","New Price", "Status", "Created At" };
         csvData.add(header);
 
-        for (ProductTemp product : pendingProducts) {
+        for (ProductCatalogRequest product : pendingProducts) {
             String[] row = new String[] {
                     String.valueOf(product.requestId),
                     product.getProductId(),
@@ -103,7 +103,7 @@ public class UpdateProductCatalogServiceImpl implements UpdateProductCatalogServ
             Product currentProduct = productRepository.findByProductId(updatedProduct.getProductId());
 
             if (currentProduct != null) {
-                currentProduct.setImageUrl(updatedProduct.getImageUrl());
+//                currentProduct.setImageUrl(updatedProduct.getImageUrl());
                 currentProduct.setProductDescription(updatedProduct.getProductDescription());
                 currentProduct.setStock(updatedProduct.getStock());
                 currentProduct.setPrice(updatedProduct.getPrice());

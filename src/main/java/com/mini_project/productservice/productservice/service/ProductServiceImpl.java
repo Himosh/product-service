@@ -1,6 +1,6 @@
 package com.mini_project.productservice.productservice.service;
 
-import com.mini_project.productservice.productservice.dto.ProductDTO;
+import com.mini_project.productservice.productservice.model.dto.ProductDTO;
 import com.mini_project.productservice.productservice.model.Product;
 import com.mini_project.productservice.productservice.repository.ProductRepository;
 import com.mini_project.productservice.productservice.service.interfaces.ProductService;
