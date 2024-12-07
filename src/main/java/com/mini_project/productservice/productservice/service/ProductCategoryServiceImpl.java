@@ -5,6 +5,7 @@ import com.mini_project.productservice.productservice.model.ProductCategory;
 import com.mini_project.productservice.productservice.repository.ProductCategoryRepository;
 import com.mini_project.productservice.productservice.service.interfaces.ProductCategoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,15 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
-    private final ProductCategoryRepository productCategoryRepository;
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
 
-
-    /**
-     * Retrieve all categories from the database.
-     *
-     * @return List of ProductCategory objects
-     * @throws RuntimeException if an error occurs during fetching categories
-     */
     @Override
     public List<ProductCategory> getAllCategories() {
         try {
@@ -34,6 +29,36 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
             return categories;
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving categories: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public ProductCategory createCategory(ProductCategory category) {
+        try {
+            ProductCategory newCategory = productCategoryRepository.save(category);
+            return newCategory;
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating category: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public ProductCategory updateCategory(ProductCategory category) {
+        try {
+            ProductCategory updatedCategory = productCategoryRepository.save(category);
+            return updatedCategory;
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating category: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public String deleteCategory(Long categoryId) {
+        try {
+            productCategoryRepository.deleteById(categoryId);
+            return "Category deleted successfully.";
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting category: " + e.getMessage(), e);
         }
     }
 }

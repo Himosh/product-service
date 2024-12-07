@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ProductRepository extends JpaRepository<Product,String> {
-    Product findByProductId(String productId);
+public interface ProductRepository extends JpaRepository<Product,Long> {
     Page<Product> findByCategory_CategoryName(String categoryName, Pageable pageable);
 
     Page<Product> findBySupplierId(String supplierId, Pageable pageable);

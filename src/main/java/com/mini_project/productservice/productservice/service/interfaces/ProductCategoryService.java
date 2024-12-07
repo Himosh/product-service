@@ -6,12 +6,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ProductCategoryService {
-
-    /**
-     * Retrieves all product categories from the database.
-     *
-     * @return a ResponseEntity with a list of all product categories.
-     */
     List<ProductCategory> getAllCategories();
-
+    ProductCategory createCategory(ProductCategory category);
+    ProductCategory updateCategory(ProductCategory category);
+    String deleteCategory(Long categoryId);
 }

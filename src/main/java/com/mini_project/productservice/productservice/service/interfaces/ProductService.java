@@ -28,7 +28,7 @@ public interface ProductService {
      * @param productId The unique ID of the product.
      * @return The product with the specified ID.
      */
-    ProductDTO getProductById(String productId);
+    ProductDTO getProductById(Long productId);
 
     /**
      * Retrieve products by supplier ID with pagination.
