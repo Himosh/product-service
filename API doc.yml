@@ -1,0 +1,733 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: eCommerce Application
+  description: API documentation for managing users, products, orders, and approvals in the e-commerce platform.
+  contact:
+    name: Mohamed Rishad
+    email: Mohamed.Rishad@sysco.com
+tags:
+  - name: user-service
+    description: Manage operations related to users.
+  - name: product-service
+    description: Handle product-related functionalities.
+  - name: order-service
+    description: Manage order operations.
+paths:
+  /users:
+    post:
+      tags:
+        - user-service
+      summary: Add a new user to the platform.
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Successfully created the user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Request validation failed. Ensure all required fields are provided.
+        '401':
+          description: Authentication failed. Access is restricted.
+        '500':
+          description: A server error occurred. Please try again later.
+
+    get:
+      tags:
+        - user-service
+      summary: Fetch all registered users.
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: Successfully retrieved the list of users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '400':
+          description: Malformed request. Verify the input and try again.
+        '401':
+          description: Authentication required for this operation.
+        '500':
+          description: Internal server error. Contact support if the issue persists.
+
+  /users/{userId}:
+    get:
+      tags:
+        - user-service
+      summary: Fetch details of a specific user by ID.
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid user ID provided. Please verify the ID.
+        '401':
+          description: Access is denied. Authentication required.
+        '404':
+          description: User with the specified ID does not exist.
+        '500':
+          description: Unexpected error occurred. Retry later or contact support.
+
+    patch:
+      tags:
+        - user-service
+      summary: Update user information by their unique ID.
+      operationId: updateUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '200':
+          description: User information updated successfully.
+        '400':
+          description: Input validation failed. Verify the update payload.
+        '401':
+          description: You are not authorized to perform this operation.
+        '404':
+          description: The specified user could not be found.
+        '500':
+          description: A server error prevented processing the request.
+
+    delete:
+      tags:
+        - user-service
+      summary: Remove a user from the system using their ID.
+      operationId: deleteUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User successfully removed from the system.
+        '400':
+          description: Provided user ID is invalid or malformed.
+        '401':
+          description: Unauthorized action. Authentication required.
+        '404':
+          description: User not found for the specified ID.
+        '500':
+          description: Failed to process the request. Retry or contact support.
+  /products:
+    get:
+      tags:
+        - product-service
+      summary: Retrieve all products with pagination
+      operationId: getAllProducts
+      parameters:
+        - name: page
+          in: query
+          required: false
+          description: The page number for pagination (defaults to 0).
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: The number of products per page (defaults to 10).
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of all products retrieved successfully with pagination
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        '500':
+          description: Internal server error
+
+  /products?category={category}:
+    get:
+      tags:
+        - product-service
+      summary: Retrieve products by category with pagination
+      operationId: getProductsByCategory
+      parameters:
+        - name: category
+          in: query
+          required: true
+          description: The category to filter products by.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number for pagination (defaults to 0).
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: The number of products per page (defaults to 10).
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of products in the specified category retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        '404':
+          description: No products found in the specified category
+        '500':
+          description: Internal server error
+
+  /products/{productId}:
+    get:
+      tags:
+        - product-service
+      summary: Retrieve a product by its ID
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: The ID of the product to retrieve.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+        '500':
+          description: Internal server error
+
+  /products?productName={productName}:
+    get:
+      tags:
+        - product-service
+      summary: Search products by product name with pagination
+      operationId: searchProductsByProductName
+      parameters:
+        - name: productName
+          in: query
+          required: true
+          description: The product name or partial name to search for.
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number for pagination (defaults to 0).
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: The number of products per page (defaults to 10).
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of products matching the product name retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  totalPages:
+                    type: integer
+                  totalElements:
+                    type: integer
+                  size:
+                    type: integer
+                  number:
+                    type: integer
+        '404':
+          description: No products found with the given name
+        '500':
+          description: Internal server error
+
+  /products/catalog:
+    patch:
+      tags:
+        - product-service
+      summary: Submit a list of product catalog change requests
+      operationId: submitChangeRequests
+      requestBody:
+        description: A list of product catalog change requests.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductChangeRequest'
+      responses:
+        '200':
+          description: Product catalog change requests processed successfully
+        '400':
+          description: Invalid request body or missing required fields
+        '500':
+          description: Internal server error
+
+
+  /orders?supplier={supplierId}:
+    get:
+      tags:
+        - order-service
+      summary: Retrieve all orders by supplier ID
+      operationId: getOrdersBySupplierId
+      parameters:
+        - name: supplierId
+          in: query
+          required: true
+          description: Supplier Id
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: The page number for pagination (defaults to 0).
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: The number of orders per page (defaults to 10).
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: List of orders retrieved successfully for the given supplier
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid request, such as an invalid or malformed `supplierId`
+        '401':
+          description: Unauthorized request
+        '404':
+          description: No orders found for the given supplier ID
+        '500':
+          description: Internal server error
+
+  /orders:
+    get:
+      tags:
+        - order-service
+      summary: Retrieve all orders
+      operationId: getAllOrders
+      responses:
+        '200':
+          description: List of all orders retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized request
+        '500':
+          description: Internal server error
+
+  /orders?orderId={orderId}:
+    get:
+      tags:
+        - order-service
+      summary: Retrieve order details by ID
+      operationId: getOrderById
+      parameters:
+        - name: orderId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid order ID
+        '401':
+          description: Unauthorized request
+        '404':
+          description: Order not found
+        '500':
+          description: Internal server error
+
+  /orders/cart?userId={userId}:
+    patch:
+      tags:
+        - order-service
+      summary: Add/update items in the cart for the given user ID
+      operationId: updateCart
+      parameters:
+        - name: userId
+          in: query
+          description: The unique identifier for the user whose cart is being updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCart'
+      responses:
+        '200':
+          description: Cart updated successfully
+        '400':
+          description: Invalid cart details or malformed request
+        '401':
+          description: Unauthorized request
+        '500':
+          description: Internal server error
+
+    get:
+      tags:
+        - order-service
+      summary: Retrieve the cart associated with a given user ID
+      operationId: getCartByUserId
+      parameters:
+        - name: userId
+          in: query
+          description: The unique identifier for the user whose cart is being retrieved
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Current cart retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        '400':
+          description: Invalid request or malformed user ID
+        '401':
+          description: Unauthorized request
+        '404':
+          description: Cart not found for the given user ID
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - order-service
+      summary: Clear the cart identified by the provided cart ID
+      operationId: clearCart
+      parameters:
+        - name: cartId
+          in: query
+          description: The unique identifier for the cart to be cleared
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Cart cleared successfully
+        '400':
+          description: Invalid request, such as an invalid cart ID
+        '401':
+          description: Unauthorized request
+        '404':
+          description: Cart not found for the given cart ID
+        '500':
+          description: Internal server error
+
+    put:
+      tags:
+        - order-service
+      summary: Place an order based on the provided cart ID
+      operationId: checkoutWithCartId
+      parameters:
+        - name: cartId
+          in: query
+          description: The unique identifier for the cart to place the order
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Order created successfully from the specified cart
+        '400':
+          description: Invalid cart ID or order details, including issues in the cart
+        '401':
+          description: Unauthorized request
+        '404':
+          description: Cart not found for the given cart ID
+        '422':
+          description: Cart is empty, cannot place an order
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique identifier for the user
+        name:
+          type: string
+          description: Name of the user
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+        password:
+          type: string
+          description: Password for the user account
+        address:
+          type: string
+          description: Shipping address for the user
+        phone:
+          type: string
+          description: Phone number of the user
+      required:
+        - userId
+        - name
+        - email
+        - password
+
+    UserUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the user
+        email:
+          type: string
+          format: email
+          description: Email address of the user
+        address:
+          type: string
+          description: Shipping address for the user
+        phone:
+          type: string
+          description: Phone number of the user
+      required:
+        - name
+        - email
+
+    Product:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: Unique identifier for the product
+        productName:
+          type: string
+          description: Name of the product
+        category:
+          type: string
+          description: Category of the product
+        price:
+          type: number
+          format: float
+          description: Price of the product
+        description:
+          type: string
+          description: Detailed description of the product
+        stockQuantity:
+          type: integer
+          description: Quantity of the product in stock
+      required:
+        - productId
+        - productName
+        - price
+        - stockQuantity
+
+    ProductChangeRequest:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: Product ID to apply the change
+        changeType:
+          type: string
+          enum: [ADD, REMOVE, UPDATE]
+          description: Type of catalog change request
+        details:
+          type: object
+          description: Specific details of the change request
+        quantity:
+          type: integer
+          description: Quantity of the product to add/remove/update
+      required:
+        - productId
+        - changeType
+
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: Unique identifier for the order
+        userId:
+          type: string
+          description: ID of the user who placed the order
+        productIds:
+          type: array
+          items:
+            type: string
+          description: List of product IDs included in the order
+        totalAmount:
+          type: number
+          format: float
+          description: Total amount for the order
+        orderStatus:
+          type: string
+          enum: [PENDING, SHIPPED, DELIVERED, CANCELLED]
+          description: Current status of the order
+        orderDate:
+          type: string
+          format: date-time
+          description: Date and time when the order was placed
+      required:
+        - orderId
+        - userId
+        - productIds
+        - totalAmount
+        - orderStatus
+
+    Cart:
+      type: object
+      properties:
+        cartId:
+          type: string
+          description: Unique identifier for the cart
+        userId:
+          type: string
+          description: User ID to which the cart belongs
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: Product ID in the cart
+              quantity:
+                type: integer
+                description: Quantity of the product in the cart
+        totalAmount:
+          type: number
+          format: float
+          description: Total amount of the cart's items
+      required:
+        - cartId
+        - userId
+        - items
+        - totalAmount
+
+    UpdateCart:
+      type: object
+      properties:
+        cartId:
+          type: string
+          description: The ID of the cart to update
+        userId:
+          type: string
+          description: User ID to which the cart belongs
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: Product ID in the cart
+              quantity:
+                type: integer
+                description: Quantity of the product to add or update
+      required:
+        - cartId
+        - userId
+        - items
+
+  responses:
+    Unauthorized:
+      description: Authentication failed or the user is not authorized
+    NotFound:
+      description: Resource not found
+    InternalServerError:
+      description: An unexpected error occurred in the server
