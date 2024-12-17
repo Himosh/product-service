@@ -1,6 +1,9 @@
 package com.mini_project.config;
 
+import com.mini_project.model.ProductCategory;
+import com.mini_project.model.dto.ProductCategoryDTO;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,12 +13,12 @@ public class ModelMapperConfig {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
-//        modelMapper.addMappings(new PropertyMap<ProductCatalogAddRequest, ProductCatalogRequest>() {
-//            @Override
-//            protected void configure() {
-//                skip(destination.getId(),destination.getSupplierId());
-//            }
-//        });
+        modelMapper.addMappings(new PropertyMap<ProductCategoryDTO, ProductCategory>() {
+            @Override
+            protected void configure() {
+                skip(destination.getId(),destination.getId());
+            }
+        });
 //
 //        modelMapper.addMappings(new PropertyMap<WorkLogCreateDTO, WorkLog>() {
 //            @Override

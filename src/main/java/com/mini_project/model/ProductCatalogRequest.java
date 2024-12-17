@@ -37,7 +37,7 @@ public class ProductCatalogRequest {
     private Double price;
 
     @ManyToOne
-    @JoinColumn(name = "category_name", nullable = false)
+    @JoinColumn
     private ProductCategory category;
 
     @Temporal(TemporalType.TIMESTAMP)

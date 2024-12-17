@@ -7,14 +7,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "product_category")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductCategory {
 
     @Id
-    @Column(name = "category_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

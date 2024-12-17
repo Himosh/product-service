@@ -56,4 +56,13 @@ public interface ProductService {
      * @return A page of products that match the product name.
      */
     Page<ProductDTO> searchProductsByProductName(String productName, Pageable pageable);
+
+    /**
+     * Retrieve all products by category ID with pagination.
+     *
+     * @param categoryId The category ID to filter products by.
+     * @param pageable Pagination information (page number, size, sorting).
+     * @return A page of products from the specified category.
+     */
+    Page<ProductDTO> getAllProductsByCategory(Long categoryId, Pageable pageable);
 }

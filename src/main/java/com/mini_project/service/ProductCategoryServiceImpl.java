@@ -2,11 +2,14 @@ package com.mini_project.service;
 
 
 import com.mini_project.model.ProductCategory;
+import com.mini_project.model.dto.ProductCategoryDTO;
 import com.mini_project.repository.ProductCategoryRepository;
 import com.mini_project.service.interfaces.ProductCategoryService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -16,6 +19,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public List<ProductCategory> getAllCategories() {
@@ -31,10 +37,10 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public ProductCategory createCategory(ProductCategory category) {
+    public ProductCategory createCategory(ProductCategoryDTO category) {
         try {
-            ProductCategory newCategory = productCategoryRepository.save(category);
-            return newCategory;
+            ProductCategory newCategory = modelMapper.map(category, ProductCategory.class);
+            return productCategoryRepository.save(newCategory);
         } catch (Exception e) {
             throw new RuntimeException("Error creating category: " + e.getMessage(), e);
         }
@@ -43,8 +49,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public ProductCategory updateCategory(ProductCategory category) {
         try {
-            ProductCategory updatedCategory = productCategoryRepository.save(category);
-            return updatedCategory;
+            return productCategoryRepository.save(category);
         } catch (Exception e) {
             throw new RuntimeException("Error updating category: " + e.getMessage(), e);
         }

@@ -1,11 +1,14 @@
 package com.mini_project.service;
 
 import com.mini_project.model.Product;
+import com.mini_project.model.ProductCategory;
 import com.mini_project.model.dto.ProductDTO;
+import com.mini_project.repository.ProductCategoryRepository;
 import com.mini_project.repository.ProductRepository;
 import com.mini_project.service.interfaces.ProductService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,9 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
 
     @Override
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
@@ -108,5 +114,20 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return productDTO;
+    }
+
+    @Override
+    public Page<ProductDTO> getAllProductsByCategory(Long categoryId, Pageable pageable) {
+        ProductCategory category = productCategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found with ID: " + categoryId));
+        try {
+            Page<Product> productPage = productRepository.findAllByCategory(category, pageable);
+            List<ProductDTO> productDTOList = productPage.getContent().stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+            return new PageImpl<>(productDTOList, pageable, productPage.getTotalElements());
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving products by category ID: " + e.getMessage(), e);
+        }
     }
 }

@@ -7,7 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "products")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +14,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id", nullable = false)
+    @Column
     private Long id;
 
     @Column(nullable = false)
@@ -31,7 +30,7 @@ public class Product {
     private Double price;
 
     @ManyToOne
-    @JoinColumn(name = "category_name", nullable = false)
+    @JoinColumn
     private ProductCategory category;
 
     @Temporal(TemporalType.TIMESTAMP)

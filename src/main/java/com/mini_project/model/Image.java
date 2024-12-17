@@ -19,11 +19,11 @@ public class Image {
     private byte[] data;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "request_id")
+    @JoinColumn
     private ProductCatalogRequest productCatalogRequest;
 }
 

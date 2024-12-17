@@ -1,6 +1,7 @@
 package com.mini_project.repository;
 
 import com.mini_project.model.Product;
+import com.mini_project.model.ProductCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,8 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     Page<Product> findByCategory_CategoryName(String categoryName, Pageable pageable);
 
     Page<Product> findBySupplierId(String supplierId, Pageable pageable);
+
+    Page<Product> findAllByCategory(ProductCategory productCategory, Pageable pageable);
 
     Page<Product> findByCategoryContainingIgnoreCase(String categoryName, Pageable pageable);
 
