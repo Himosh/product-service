@@ -17,8 +17,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     Page<Product> findByCategoryContainingIgnoreCase(String categoryName, Pageable pageable);
 
-    @Query(value = "SELECT * FROM products p WHERE p.name LIKE %:productName%", nativeQuery = true)
-    Page<Product> searchByPartialName(@Param("productName") String productName, Pageable pageable);
+//    @Query(value = "SELECT * FROM products p WHERE p.name LIKE %:productName%", nativeQuery = true)
+//    Page<Product> searchByPartialName(@Param("productName") String productName, Pageable pageable);
+    Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     @Query(value = "SELECT p.* FROM products p INNER JOIN product_category c ON p.category_name = c.category_name WHERE c.category_name LIKE %:categoryName%", nativeQuery = true)
     Page<Product> searchByCategoryName(@Param("categoryName") String categoryName, Pageable pageable);

@@ -96,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDTO> searchProductsByProductName(String productName, Pageable pageable) {
         try {
-            Page<Product> productPage = productRepository.searchByPartialName(productName, pageable);
+            Page<Product> productPage = productRepository.findByNameContainingIgnoreCase(productName, pageable);
             List<ProductDTO> productDTOList = productPage.getContent().stream()
                     .map(this::convertToDTO)
                     .collect(Collectors.toList());
