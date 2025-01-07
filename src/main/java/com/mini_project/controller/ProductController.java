@@ -6,6 +6,7 @@ import com.mini_project.model.dto.UpdateProductStatusDTO;
 import com.mini_project.model.dto.ProductDTO;
 import com.mini_project.service.ProductServiceImpl;
 import com.mini_project.service.ProductCatalogRequestServiceImpl;
+import com.mini_project.service.interfaces.ProductCatalogRequestService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,11 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductController extends AbstractBaseController {
 
-    private final ProductCatalogRequestServiceImpl productUpdateService;
-    private final ProductServiceImpl productService;
+    @Autowired
+    private ProductServiceImpl productService;
 
     @Autowired
-    private ProductCatalogRequestServiceImpl productCatalogRequestService;
+    private ProductCatalogRequestService productCatalogRequestService;
 
     @GetMapping
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
@@ -86,6 +87,16 @@ public class ProductController extends AbstractBaseController {
                 () -> productCatalogRequestService.updateProductStatus(updateProductStatusDTOList),
                 HttpStatus.OK,
                 "Updating product statuses"
+        );
+    }
+
+    @GetMapping("/catalog-requests")
+    public ResponseEntity<Page<ProductCatalogRequest>> getAllProductsCatalogRequests(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        return handlePaginatedResponse(
+                () -> productCatalogRequestService.getAllProductCatalogRequests(PageRequest.of(page, size)),
+                "Retrieving all products"
         );
     }
 }
